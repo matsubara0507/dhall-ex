@@ -10,7 +10,7 @@
 
 module Main where
 
-import qualified Paths_dhall_ext     as Meta
+import qualified Paths_dhall_ex      as Meta
 import           RIO
 
 import           Data.Extensible

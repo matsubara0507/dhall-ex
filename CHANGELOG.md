@@ -1,3 +1,3 @@
-# Changelog for dhall-ext
+# Changelog for dhall-ex
 
 ## Unreleased changes

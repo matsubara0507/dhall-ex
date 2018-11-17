@@ -1,4 +1,4 @@
-# dhall-ext
+# dhall-ex
 
 Dhall + exports
 

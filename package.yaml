@@ -1,14 +1,14 @@
-name:                dhall-ext
+name:                dhall-ex
 version:             0.1.0.0
 #synopsis:
 #description:
-homepage:            https://github.com/matsubara0507/dhall-ext#readme
+homepage:            https://github.com/matsubara0507/dhall-ex#readme
 license:             MIT
 author:              MATSUBARA Nobutada
 maintainer:          t12307043@gunma-u.ac.jp
 copyright:           MATSUBARA Nobutada
 category:            Web
-description:         Please see the README on GitHub at <https://github.com/matsubara0507/dhall-ext#readme>
+description:         Please see the README on GitHub at <https://github.com/matsubara0507/dhall-ex#readme>
 
 extra-source-files:
 - README.md
@@ -44,20 +44,20 @@ library:
   source-dirs: src
 
 executables:
-  dhall-ext:
+  dhall-ex:
     main: Main.hs
     source-dirs: app
     dependencies:
-    - dhall-ext
+    - dhall-ex
     - gitrev
     - optparse-applicative
 
 tests:
-  dhall-ext-test:
+  dhall-ex-test:
     main: Driver.hs
     source-dirs: test
     dependencies:
-    - dhall-ext
+    - dhall-ex
     - tasty
     - tasty-hspec
     other-modules: []
