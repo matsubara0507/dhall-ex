@@ -1,22 +1,25 @@
+{-# LANGUAGE DataKinds        #-}
 {-# LANGUAGE OverloadedLabels #-}
+{-# LANGUAGE TypeApplications #-}
+{-# LANGUAGE TypeOperators    #-}
 
 module Dhall.Ex.Cmd
     ( module X
-    , Cmd (..)
-    , toCmd
+    , run
     ) where
 
 import           RIO
 
+import           Data.Extensible
 import           Dhall.Ex.Cmd.Options as X
 import           Dhall.Ex.Cmd.Run     as X
 
-data Cmd
-  = PrintVersion
-  | RunCmd Options
-  deriving (Show, Eq)
-
-toCmd :: Options -> Cmd
-toCmd opts
-  | opts ^. #version = PrintVersion
-  | otherwise        = RunCmd opts
+run :: (MonadUnliftIO m, MonadThrow m) => Options -> m ()
+run opts = do
+  logOpts <- logOptionsHandle stdout (opts ^. #verbose)
+  withLogFunc logOpts $ \logger -> do
+    let env = #logger @= logger
+           <: nil
+    runRIO env $ matchField
+      (htabulateFor (Proxy @ Run) $ \m -> Field (Match $ run' m . runIdentity))
+      (opts ^. #subcmd)

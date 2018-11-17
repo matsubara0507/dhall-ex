@@ -50,6 +50,7 @@ executables:
     dependencies:
     - dhall-ext
     - gitrev
+    - optparse-applicative
 
 tests:
   dhall-ext-test:

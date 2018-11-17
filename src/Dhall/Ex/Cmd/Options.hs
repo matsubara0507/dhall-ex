@@ -1,22 +1,26 @@
 {-# LANGUAGE DataKinds        #-}
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE TypeOperators    #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 
 module Dhall.Ex.Cmd.Options where
 
 import           RIO
 
 import           Data.Extensible
-import           Data.Extensible.GetOpt
+import           Dhall.Ex.Cmd.Run
 
 type Options = Record
-  '[ "input"   >: [String]
-   , "version" >: Bool
-   , "verbose" >: Bool
+  '[ "verbose" >: Bool
+   , "subcmd"  >: SubCmd
    ]
 
-versionOpt :: OptDescr' Bool
-versionOpt = optFlag [] ["version"] "Show version"
+type SubCmd = Variant SubCmdFields
 
-verboseOpt :: OptDescr' Bool
-verboseOpt = optFlag ['v'] ["verbose"] "Enable verbose mode: verbosity level \"debug\""
+type SubCmdFields =
+  '[ "format" >: Text
+   ]
+
+
+instance Run ("format" >: Text) where
+  run' _ _ = showNotImpl
