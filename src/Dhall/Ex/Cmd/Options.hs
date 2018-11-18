@@ -6,9 +6,11 @@
 module Dhall.Ex.Cmd.Options where
 
 import           RIO
+import qualified RIO.Text         as Text
 
 import           Data.Extensible
 import           Dhall.Ex.Cmd.Run
+import qualified Dhall.Ex.Format  as Format
 
 type Options = Record
   '[ "verbose" >: Bool
@@ -21,6 +23,5 @@ type SubCmdFields =
   '[ "format" >: Text
    ]
 
-
 instance Run ("format" >: Text) where
-  run' _ _ = showNotImpl
+  run' _ = Format.run . Text.unpack
