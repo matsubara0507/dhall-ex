@@ -41,6 +41,7 @@ dependencies:
 - extensible >= 0.4.9
 - dhall
 - insert-ordered-containers
+- prettyprinter
 
 library:
   source-dirs: src
