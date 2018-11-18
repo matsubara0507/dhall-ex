@@ -40,6 +40,7 @@ dependencies:
 - rio >= 0.1.1.0
 - extensible >= 0.4.9
 - dhall
+- insert-ordered-containers
 
 library:
   source-dirs: src

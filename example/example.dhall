@@ -1,13 +1,8 @@
-{ apiVersion =
-    "v1"
-, kind =
-    "Service"
-, spec =
-    { selector =
-        { app = "MyApp" }
-    , ports =
-        [ { targetPort = 80.0, protocol = "TCP", port = 80.0 } ]
-    }
-, metadata =
-    { name = "my-service" }
-}
+  { hoge1 =
+      "hoge"
+  , hoge3 =
+      { fuga2 = 10, fuga1 = "fuga" }
+  , hoge2 =
+      [ "hogege", "hohoge" ]
+  }
+: ./example_type.dhall
