@@ -4,7 +4,7 @@
 {-# LANGUAGE TypeOperators    #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
-module Dhall.Ex.Format where
+module Dhall.Ex.Sort where
 
 import           RIO
 

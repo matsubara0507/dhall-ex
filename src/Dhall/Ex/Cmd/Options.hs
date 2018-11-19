@@ -10,7 +10,7 @@ import qualified RIO.Text         as Text
 
 import           Data.Extensible
 import           Dhall.Ex.Cmd.Run
-import qualified Dhall.Ex.Format  as Format
+import qualified Dhall.Ex.Sort    as Sort
 
 type Options = Record
   '[ "verbose" >: Bool
@@ -20,8 +20,8 @@ type Options = Record
 type SubCmd = Variant SubCmdFields
 
 type SubCmdFields =
-  '[ "format" >: Text
+  '[ "sort" >: Text
    ]
 
-instance Run ("format" >: Text) where
-  run' _ = Format.run . Text.unpack
+instance Run ("sort" >: Text) where
+  run' _ = Sort.run . Text.unpack

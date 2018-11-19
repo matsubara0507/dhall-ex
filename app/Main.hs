@@ -36,7 +36,7 @@ options = hsequence
 
 subcmdParser :: Parser SubCmd
 subcmdParser = variantFrom
-    $ #format @= strArgument (metavar "PATH" <> help "file path") `withInfo` "Fromat dhall file"
+    $ #sort @= strArgument (metavar "PATH" <> help "file path") `withInfo` "Sort record keys in dhall file"
    <: nil
 
 variantFrom ::
