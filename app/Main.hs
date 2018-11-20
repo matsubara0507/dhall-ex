@@ -37,9 +37,10 @@ options = hsequence
 
 subcmdParser :: Parser SubCmd
 subcmdParser = variantFrom
-    $ #sort @= strArgument (metavar "PATH" <> help "file path") `withInfo` "Sort record keys in dhall file"
-   <: #echo @= strArgument (metavar "TEXT") `withInfo` "Echo TEXT"
-   <: #init @= pure () `withInfo` "Init dhall-ex work directory"
+    $ #sort  @= strArgument (metavar "PATH" <> help "file path") `withInfo` "Sort record keys in dhall file"
+   <: #echo  @= strArgument (metavar "TEXT") `withInfo` "Echo TEXT"
+   <: #init  @= pure () `withInfo` "Init dhall-ex work directory"
+   <: #build @= pure () `withInfo` "Build Dhall file to YAML or JSON"
    <: nil
 
 variantFrom ::

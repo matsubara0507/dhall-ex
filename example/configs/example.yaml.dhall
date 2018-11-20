@@ -5,4 +5,4 @@
   , hoge2 =
       [ "hogege", "hohoge" ]
   }
-: ../types/example.dhall 
+: ./../types/example.dhall

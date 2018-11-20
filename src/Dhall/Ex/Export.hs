@@ -4,14 +4,22 @@
 {-# LANGUAGE TypeOperators    #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
-module Dhall.Ex.Export where
+module Dhall.Ex.Export
+  ( module X
+  , init
+  , initExport
+  , cloneRepo
+  , constructRepoUrl
+  , workDir
+  ) where
 
 import           RIO
 import           RIO.Directory
 
-import           Dhall.Ex.Config (Export, ghToken)
+import           Dhall.Ex.Config       (Export, ghToken)
 import           Dhall.Ex.Env
-import qualified Shelly          as Sh
+import           Dhall.Ex.Export.Build as X (build)
+import qualified Shelly                as Sh
 
 init :: FilePath -> RIO Env ()
 init dir = do

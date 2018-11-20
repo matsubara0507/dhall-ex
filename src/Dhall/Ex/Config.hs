@@ -23,7 +23,7 @@ type Config = Record
 type Export = Record
   '[ "name"  >: Text
    , "repo"  >: Maybe Text
-   , "paths" >: [Text]
+   , "paths" >: [FilePath]
    ]
 
 readConfig :: (MonadIO m, MonadThrow m) => FilePath -> m Config

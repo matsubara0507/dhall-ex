@@ -1,5 +1,5 @@
 { GH_TOKEN =
-    [] : Optional Text
+    [ "matsubara0507:XXX" ] : Optional Text
 , root =
     "configs"
 , exports =
