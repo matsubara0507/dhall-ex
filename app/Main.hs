@@ -31,12 +31,14 @@ main = run =<< execParser opts
 options :: Parser Options
 options = hsequence
     $ #verbose <@=> switch (long "verbose" <> short 'v' <> help "Enable verbose mode: verbosity level \"debug\"")
+   <: #config  <@=> strOption (long "config" <> short 'c' <> value ".dhall-ex.dhall" <> metavar "PATH" <> help "Configuration file")
    <: #subcmd  <@=> subcmdParser
    <: nil
 
 subcmdParser :: Parser SubCmd
 subcmdParser = variantFrom
     $ #sort @= strArgument (metavar "PATH" <> help "file path") `withInfo` "Sort record keys in dhall file"
+   <: #echo @= strArgument (metavar "TEXT") `withInfo` "Echo TEXT"
    <: nil
 
 variantFrom ::

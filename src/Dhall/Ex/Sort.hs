@@ -60,7 +60,6 @@ writeWithPretty path (header, expr) = do
   let doc = Pretty.pretty header <> Pretty.pretty expr
   writeFileUtf8 path $ Pretty.renderStrict (Pretty.layoutSmart opts doc)
 
-
 opts :: Pretty.LayoutOptions
 opts =
   Pretty.defaultLayoutOptions

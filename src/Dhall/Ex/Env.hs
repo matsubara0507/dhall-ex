@@ -8,9 +8,11 @@ module Dhall.Ex.Env where
 import           RIO
 
 import           Data.Extensible
+import           Dhall.Ex.Config (Config)
 
 type Env = Record
   '[ "logger" >: LogFunc
+   , "config" >: Config
    ]
 
 instance HasLogFunc Env where
