@@ -10,6 +10,7 @@ import qualified RIO.Text         as Text
 
 import           Data.Extensible
 import           Dhall.Ex.Cmd.Run
+import qualified Dhall.Ex.Export  as Export
 import qualified Dhall.Ex.Sort    as Sort
 
 type Options = Record
@@ -23,6 +24,7 @@ type SubCmd = Variant SubCmdFields
 type SubCmdFields =
   '[ "sort" >: Text
    , "echo" >: Text
+   , "init" >: ()
    ]
 
 instance Run ("sort" >: Text) where
@@ -33,3 +35,6 @@ instance Run ("echo" >: Text) where
     config <- asks (view #config)
     logDebug $ displayShow config
     logInfo  $ display txt
+
+instance Run ("init" >: ()) where
+  run' _ _ = Export.init Export.workDir

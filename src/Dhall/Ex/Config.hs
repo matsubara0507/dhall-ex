@@ -6,11 +6,7 @@
 {-# LANGUAGE TypeOperators    #-}
 {-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
 
-module Dhall.Ex.Config
-  ( Config
-  , Export
-  , readConfig
-  ) where
+module Dhall.Ex.Config where
 
 import           RIO
 
@@ -20,7 +16,7 @@ import           Orphans         ()
 
 type Config = Record
   '[ "GH_TOKEN" >: Maybe Text
-   , "root"     >: Text
+   , "root"     >: FilePath
    , "exports"  >: [Export]
    ]
 
@@ -32,3 +28,6 @@ type Export = Record
 
 readConfig :: (MonadIO m, MonadThrow m) => FilePath -> m Config
 readConfig path = (liftIO . Dhall.input Dhall.auto) =<< readFileUtf8 path
+
+ghToken :: FieldOptic "GH_TOKEN"
+ghToken = itemAssoc (Proxy @ "GH_TOKEN")

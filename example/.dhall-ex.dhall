@@ -10,5 +10,12 @@
       , paths =
           [ "example.yaml" ]
       }
+    , { name =
+          "gh-example"
+      , repo =
+          [ "matsubara0507/dhall-ex-example" ] : Optional Text
+      , paths =
+          [ "example.yaml" ]
+      }
     ]
 }

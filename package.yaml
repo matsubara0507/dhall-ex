@@ -42,6 +42,7 @@ dependencies:
 - dhall
 - insert-ordered-containers
 - prettyprinter
+- shelly
 
 library:
   source-dirs: src
