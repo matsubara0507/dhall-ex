@@ -22,10 +22,11 @@ type Options = Record
 type SubCmd = Variant SubCmdFields
 
 type SubCmdFields =
-  '[ "sort"  >: Text
-   , "echo"  >: Text
-   , "init"  >: ()
-   , "build" >: ()
+  '[ "sort"   >: Text
+   , "echo"   >: Text
+   , "init"   >: ()
+   , "build"  >: ()
+   , "deploy" >: Export.Deploy
    ]
 
 instance Run ("sort" >: Text) where
@@ -42,3 +43,6 @@ instance Run ("init" >: ()) where
 
 instance Run ("build" >: ()) where
   run' _ _ = Export.build Export.workDir
+
+instance Run ("deploy" >: Export.Deploy) where
+  run' _ = Export.deploy Export.workDir
