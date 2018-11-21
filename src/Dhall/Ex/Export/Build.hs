@@ -25,7 +25,8 @@ buildExport :: FilePath -> Export -> RIO Env ()
 buildExport dir conf = do
   logDebug $ display ("build export: " <> tshow conf)
   config <- asks (view #config)
-  let action = maybe buildExportToLocal (buildExportToRepo dir) (conf ^. #repo)
+  let localAct = buildExportToLocal $ config ^. #root
+      action   = maybe localAct (buildExportToRepo dir) (conf ^. #repo)
 
   forM_ (conf ^. #paths) $ \path -> do
     let path' = (config ^. #root) </> path <.> "dhall"
@@ -35,18 +36,17 @@ buildExport dir conf = do
     logDebug $ display ("expr: " <> tshow expr)
     case Dhall.dhallToJSON expr of
       Left err  -> logError $ display ("parse error: " <> tshow err)
-      Right val -> action ((config ^. #root) </> path) val
+      Right val -> action path val
 
 buildExportToRepo :: FilePath -> Text -> FilePath -> JSON.Value -> RIO Env ()
-buildExportToRepo dir repo path = buildExportToLocal path'
-  where
-    path' = dir </> Text.unpack repo </> takeFileName path
+buildExportToRepo dir repo path =
+  buildExportToLocal (dir </> Text.unpack repo) path
 
-buildExportToLocal :: FilePath -> JSON.Value -> RIO Env ()
-buildExportToLocal path val = do
+buildExportToLocal :: FilePath -> FilePath -> JSON.Value -> RIO Env ()
+buildExportToLocal dir path val = do
   logDebug $ fromString ("write file: " <> path)
-  if | isJSON path -> liftIO $ JSON.encodeFile path val
-     | isYAML path -> liftIO $ YAML.encodeFile path val
+  if | isJSON path -> liftIO $ JSON.encodeFile (dir </> path) val
+     | isYAML path -> liftIO $ YAML.encodeFile (dir </> path) val
      | otherwise   -> logError $ fromString ("Known extension: " <> path)
 
 isJSON, isYAML :: FilePath -> Bool
