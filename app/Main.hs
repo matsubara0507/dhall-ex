@@ -27,7 +27,7 @@ main = run =<< execParser opts
   where
     opts = info (options <**> version Meta.version <**> helper)
          $ fullDesc
-        <> header "taskpad - operate daily tasks"
+        <> header "dhall-ex - cli tool to support dhall"
 
 options :: Parser Options
 options = hsequence
