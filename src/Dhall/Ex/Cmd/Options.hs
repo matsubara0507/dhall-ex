@@ -16,6 +16,7 @@ import qualified Dhall.Ex.Sort    as Sort
 type Options = Record
   '[ "verbose" >: Bool
    , "config"  >: FilePath
+   , "only"    >: Maybe Text
    , "subcmd"  >: SubCmd
    ]
 
@@ -46,7 +47,7 @@ instance Run ("build" >: ()) where
   run' _ _ = Export.build Export.workDir
 
 instance Run ("deploy" >: Export.Deploy) where
-  run' _ = Export.deploy Export.workDir
+  run' _ = runWithOnly Export.deploy Export.workDir
 
 instance Run ("checkout" >: Export.Checkout) where
-  run' _ = Export.checkout Export.workDir
+  run' _ = runWithOnly Export.checkout Export.workDir

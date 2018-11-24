@@ -13,6 +13,7 @@ import           Dhall.Ex.Config (Config)
 type Env = Record
   '[ "logger" >: LogFunc
    , "config" >: Config
+   , "only"   >: Maybe Text
    ]
 
 instance HasLogFunc Env where

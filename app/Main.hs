@@ -33,6 +33,7 @@ options :: Parser Options
 options = hsequence
     $ #verbose <@=> switch (long "verbose" <> short 'v' <> help "Enable verbose mode: verbosity level \"debug\"")
    <: #config  <@=> strOption (long "config" <> short 'c' <> value ".dhall-ex.dhall" <> metavar "PATH" <> help "Configuration file")
+   <: #only    <@=> option (pure <$> str) (long "only" <> value Nothing <> metavar "NAME" <> help "Exec subcommand only NAME in config")
    <: #subcmd  <@=> subcmdParser
    <: nil
 
@@ -49,13 +50,11 @@ subcmdParser = variantFrom
 deployCmdParser :: Parser Export.Deploy
 deployCmdParser = hsequence
     $ #branch <@=> strOption (long "branch" <> short 'b' <> metavar "BRANCH" <> help "Checkout new branch to deploy")
-   <: #only   <@=> option (pure <$> str) (long "only" <> value Nothing <> metavar "NAME" <> help "Deploy only NAME in config")
    <: nil
 
 checkoutCmdParser :: Parser Export.Checkout
 checkoutCmdParser = hsequence
     $ #branch <@=> strArgument (metavar "BRANCH" <> help "Checkout branch")
-   <: #only   <@=> option (pure <$> str) (long "only" <> value Nothing <> metavar "NAME" <> help "Checkout only NAME in config")
    <: #new    <@=> switch (long "new" <> help "Checkout new branch")
    <: nil
 
