@@ -1,3 +1,11 @@
 resolver: lts-12.18
 packages:
 - .
+
+docker:
+  repo: fpco/stack-build
+  enable: false
+image:
+  container:
+    name: matsubara0507/dhall-ex
+    base: fpco/ubuntu-with-libgmp
