@@ -1,4 +1,5 @@
 {-# LANGUAGE DataKinds        #-}
+{-# LANGUAGE LambdaCase       #-}
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE TypeOperators    #-}
@@ -22,7 +23,8 @@ runWithOnly ::
   (FilePath -> a -> Export -> RIO Env ()) -> FilePath -> a -> RIO Env ()
 runWithOnly act dir opts = do
   config <- asks (view #config)
-  only   <- asks (view #only)
-  case findExportByName (config ^. #exports) =<< only of
-    Just export -> act dir opts export
-    Nothing     -> mapM_ (act dir opts) (config ^. #exports)
+  asks (view #only) >>= \case
+    Nothing   -> mapM_ (act dir opts) (config ^. #exports)
+    Just name -> case findExportByName (config ^. #exports) name of
+      Just export -> act dir opts export
+      Nothing     -> logError $ display ("undefined name: " <> name)
