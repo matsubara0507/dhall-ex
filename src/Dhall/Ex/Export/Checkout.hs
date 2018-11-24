@@ -4,7 +4,7 @@
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE TypeOperators    #-}
 
-module Dhall.Ex.Export.Deploy where
+module Dhall.Ex.Export.Checkout where
 
 import           RIO
 import           RIO.Directory
@@ -16,26 +16,24 @@ import           Dhall.Ex.Config (Export, findExportByName)
 import           Dhall.Ex.Env
 import           Dhall.Ex.Utils
 
-type Deploy = Record
+type Checkout = Record
   '[ "branch" >: Text
    , "only"   >: Maybe Text
+   , "new"    >: Bool
    ]
 
-deploy :: FilePath -> Deploy -> RIO Env ()
-deploy dir opts = do
+checkout :: FilePath -> Checkout -> RIO Env ()
+checkout dir opts = do
   config <- asks (view #config)
   case findExportByName (config ^. #exports) =<< opts ^. #only of
-    Just export -> deployExport dir opts export
-    Nothing     -> mapM_ (deployExport dir opts) (config ^. #exports)
+    Just export -> checkoutExport dir opts export
+    Nothing     -> mapM_ (checkoutExport dir opts) (config ^. #exports)
 
-deployExport :: FilePath -> Deploy -> Export -> RIO Env ()
-deployExport dir opts conf = do
-  logDebug $ display ("deploy export: " <> tshow conf)
+checkoutExport :: FilePath -> Checkout -> Export -> RIO Env ()
+checkoutExport dir opts conf = do
+  logDebug $ display ("checkout export: " <> tshow conf)
   env <- ask
   forM_ (conf ^. #repo) $ \repo -> do
     let path = dir </> Text.unpack repo
-    withCurrentDirectory path $ shelly' env $ whenM existChangesFile $ do
-      gitCheckout True (opts ^. #branch)
-      gitCommitAllChanges "Update config by dhall-ex"
-      gitPush True (opts ^. #branch)
-      gitCheckout False "-"
+    withCurrentDirectory path $
+      shelly' env $ gitCheckout (opts ^. #new) (opts ^. #branch)

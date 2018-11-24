@@ -38,17 +38,25 @@ options = hsequence
 
 subcmdParser :: Parser SubCmd
 subcmdParser = variantFrom
-    $ #sort   @= strArgument (metavar "PATH" <> help "file path") `withInfo` "Sort record keys in dhall file"
-   <: #echo   @= strArgument (metavar "TEXT") `withInfo` "Echo TEXT"
-   <: #init   @= pure () `withInfo` "Init dhall-ex work directory"
-   <: #build  @= pure () `withInfo` "Build Dhall file to YAML or JSON"
-   <: #deploy @= deployCmdParser `withInfo` "Deploy builded config file to remote repository"
+    $ #sort     @= strArgument (metavar "PATH" <> help "file path") `withInfo` "Sort record keys in dhall file"
+   <: #echo     @= strArgument (metavar "TEXT") `withInfo` "Echo TEXT"
+   <: #init     @= pure () `withInfo` "Init dhall-ex work directory"
+   <: #build    @= pure () `withInfo` "Build Dhall file to YAML or JSON"
+   <: #deploy   @= deployCmdParser `withInfo` "Deploy builded config file to remote repository"
+   <: #checkout @= checkoutCmdParser `withInfo` "Checkout repository in dhall workspace"
    <: nil
 
 deployCmdParser :: Parser Export.Deploy
 deployCmdParser = hsequence
     $ #branch <@=> strOption (long "branch" <> short 'b' <> metavar "BRANCH" <> help "Checkout new branch to deploy")
    <: #only   <@=> option (pure <$> str) (long "only" <> value Nothing <> metavar "NAME" <> help "Deploy only NAME in config")
+   <: nil
+
+checkoutCmdParser :: Parser Export.Checkout
+checkoutCmdParser = hsequence
+    $ #branch <@=> strArgument (metavar "BRANCH" <> help "Checkout branch")
+   <: #only   <@=> option (pure <$> str) (long "only" <> value Nothing <> metavar "NAME" <> help "Checkout only NAME in config")
+   <: #new    <@=> switch (long "new" <> help "Checkout new branch")
    <: nil
 
 variantFrom ::
