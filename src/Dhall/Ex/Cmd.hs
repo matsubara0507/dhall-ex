@@ -22,6 +22,7 @@ run opts = do
   withLogFunc logOpts $ \logger -> do
     let env = #logger @= logger
            <: #config @= config
+           <: #only   @= (opts ^. #only)
            <: nil
     runRIO env $ matchField
       (htabulateFor (Proxy @ Run) $ \m -> Field (Match $ run' m . runIdentity))

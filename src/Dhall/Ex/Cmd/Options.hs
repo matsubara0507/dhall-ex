@@ -16,17 +16,19 @@ import qualified Dhall.Ex.Sort    as Sort
 type Options = Record
   '[ "verbose" >: Bool
    , "config"  >: FilePath
+   , "only"    >: Maybe Text
    , "subcmd"  >: SubCmd
    ]
 
 type SubCmd = Variant SubCmdFields
 
 type SubCmdFields =
-  '[ "sort"   >: Text
-   , "echo"   >: Text
-   , "init"   >: ()
-   , "build"  >: ()
-   , "deploy" >: Export.Deploy
+  '[ "sort"     >: Text
+   , "echo"     >: Text
+   , "init"     >: ()
+   , "build"    >: ()
+   , "deploy"   >: Export.Deploy
+   , "checkout" >: Export.Checkout
    ]
 
 instance Run ("sort" >: Text) where
@@ -45,4 +47,7 @@ instance Run ("build" >: ()) where
   run' _ _ = Export.build Export.workDir
 
 instance Run ("deploy" >: Export.Deploy) where
-  run' _ = Export.deploy Export.workDir
+  run' _ = runWithOnly Export.deploy Export.workDir
+
+instance Run ("checkout" >: Export.Checkout) where
+  run' _ = runWithOnly Export.checkout Export.workDir

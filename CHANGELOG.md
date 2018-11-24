@@ -3,3 +3,4 @@
 ## Unreleased changes
 
 - Feat: docker image
+- Feat: checkout subcommand
