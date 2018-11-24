@@ -25,3 +25,10 @@ jobs:
         - stack exec -- dhall-ex echo success
         - stack exec -- dhall-ex build
         - git diff --name-only >&2
+    - stage: push docker image
+      if: branch = master
+      script:
+       - stack docker pull
+       - stack --docker image container
+       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+       - docker push $TRAVIS_REPO_SLUG

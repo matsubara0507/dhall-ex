@@ -24,7 +24,7 @@ Available commands:
 
 ## Requirement
 
-- [stack](https://docs.haskellstack.org/)
+- [Haskell Stack](https://docs.haskellstack.org/) or Docker
 - [dhall](https://github.com/dhall-lang/dhall-lang) (optional)
     - dhall-ex use dhall-1.5.1
 
@@ -36,6 +36,12 @@ Use Haskell Stack:
 $ stack install
 ```
 
+or use docker:
+
+```
+$ docker pull matsubara0507/dhall-ex
+```
+
 ## Usage
 
 Write dhall-ex's config file `.dhall-ex.dhall` typed by [`dhall/dhall-ex-type.dhall`](dhall/dhall-ex-type.dhall).
@@ -44,6 +50,13 @@ Exec echo subcommand to type check dhall's config file:
 ```
 $ dhall-ex echo hoge
 hoge
+```
+
+If use docker:
+
+```
+$ docker run --rm -v `pwd`:/work matsubara0507/dhall-ex /bin/bash -c "cd work && dhall-ex echo 'hello docker'"
+hello docker
 ```
 
 Initialize dhall workspace with dhall's config file:
