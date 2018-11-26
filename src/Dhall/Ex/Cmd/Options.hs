@@ -6,6 +6,7 @@
 module Dhall.Ex.Cmd.Options where
 
 import           RIO
+import           RIO.Directory
 import qualified RIO.Text         as Text
 
 import           Data.Extensible
@@ -42,10 +43,13 @@ instance Run ("echo" >: Text) where
     logInfo  $ display txt
 
 instance Run ("init" >: ()) where
-  run' _ _ = Export.init Export.workDir
+  run' _ _ = do
+    logDebug $ fromString ("creat work directory if missing: " <> Export.workDir)
+    createDirectoryIfMissing True Export.workDir
+    runWithOnly' Export.init Export.workDir
 
 instance Run ("build" >: ()) where
-  run' _ _ = Export.build Export.workDir
+  run' _ _ = runWithOnly' Export.build Export.workDir
 
 instance Run ("deploy" >: Export.Deploy) where
   run' _ = runWithOnly Export.deploy Export.workDir
