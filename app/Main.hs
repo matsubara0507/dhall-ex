@@ -56,6 +56,7 @@ checkoutCmdParser :: Parser Export.Checkout
 checkoutCmdParser = hsequence
     $ #branch <@=> strArgument (metavar "BRANCH" <> help "Checkout branch")
    <: #new    <@=> switch (long "new" <> help "Checkout new branch")
+   <: #reset  <@=> switch (long "reset" <> help "Checkout with Hard git reset")
    <: nil
 
 variantFrom ::

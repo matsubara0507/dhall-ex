@@ -28,6 +28,11 @@ gitPush isNew branch = Sh.command1_ "git" [] "push" opts
   where
     opts = if isNew then ["-u", "origin", branch] else ["origin", branch]
 
+gitReset :: Bool -> Sh.Sh ()
+gitReset isForce = Sh.command1_ "git" [] "reset" opts
+  where
+    opts = if isForce then ["--hard", "HEAD"] else ["HEAD"]
+
 gitCommitAllChanges :: Text -> Sh.Sh ()
 gitCommitAllChanges message = do
   gitAdd "."
