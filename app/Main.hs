@@ -45,6 +45,7 @@ subcmdParser = variantFrom
    <: #build    @= pure () `withInfo` "Build Dhall file to YAML or JSON"
    <: #deploy   @= deployCmdParser `withInfo` "Deploy builded config file to remote repository"
    <: #checkout @= checkoutCmdParser `withInfo` "Checkout repository in dhall workspace"
+   <: #pull     @= pure () `withInfo` "Pull repository in dhall workspace"
    <: nil
 
 deployCmdParser :: Parser Export.Deploy

@@ -20,7 +20,7 @@ import           Dhall.Ex.Config        (Export, ghToken)
 import           Dhall.Ex.Env
 import           Dhall.Ex.Export.Build  as X (build)
 import           Dhall.Ex.Export.Deploy as X (Deploy, deploy)
-import           Dhall.Ex.Export.Git    as X (Checkout, checkout)
+import           Dhall.Ex.Export.Git    as X (Checkout, checkout, pull)
 import qualified Shelly                 as Sh
 
 init :: FilePath -> RIO Env ()

@@ -29,6 +29,7 @@ type SubCmdFields =
    , "build"    >: ()
    , "deploy"   >: Export.Deploy
    , "checkout" >: Export.Checkout
+   , "pull"     >: ()
    ]
 
 instance Run ("sort" >: Text) where
@@ -51,3 +52,6 @@ instance Run ("deploy" >: Export.Deploy) where
 
 instance Run ("checkout" >: Export.Checkout) where
   run' _ = runWithOnly Export.checkout Export.workDir
+
+instance Run ("pull" >: ()) where
+  run' _ _ = runWithOnly' Export.pull Export.workDir

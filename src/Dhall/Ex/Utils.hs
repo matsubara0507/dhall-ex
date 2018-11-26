@@ -28,6 +28,9 @@ gitPush isNew branch = Sh.command1_ "git" [] "push" opts
   where
     opts = if isNew then ["-u", "origin", branch] else ["origin", branch]
 
+gitPull :: Sh.Sh ()
+gitPull = Sh.command1_ "git" [] "pull" []
+
 gitReset :: Bool -> Sh.Sh ()
 gitReset isForce = Sh.command1_ "git" [] "reset" opts
   where

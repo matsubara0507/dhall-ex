@@ -31,3 +31,11 @@ checkout dir opts conf = do
     withCurrentDirectory path $ shelly' env $ do
       when (opts ^. #reset) $ gitReset True
       gitCheckout (opts ^. #new) (opts ^. #branch)
+
+pull :: FilePath -> Export -> RIO Env ()
+pull dir conf = do
+  logDebug $ display ("pull export: " <> tshow conf)
+  env <- ask
+  forM_ (conf ^. #repo) $ \repo -> do
+    let path = dir </> Text.unpack repo
+    withCurrentDirectory path $ shelly' env gitPull
