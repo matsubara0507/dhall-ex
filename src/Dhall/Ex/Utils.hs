@@ -1,11 +1,13 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE OverloadedLabels #-}
 
 module Dhall.Ex.Utils where
 
 import           RIO
-import qualified RIO.Text as Text
+import qualified RIO.Text     as Text
 
-import qualified Shelly   as Sh
+import           Dhall.Ex.Env (HasVerboseFlag (..))
+import qualified Shelly       as Sh
 
 gitStatus :: Sh.Sh Text
 gitStatus = Sh.command1 "git" [] "status" []
@@ -37,8 +39,10 @@ existChangesFile = do
   pure . not $ "nothing to commit, working tree clean\n" `Text.isSuffixOf` txt
 
 shelly'
-  :: (MonadIO m, HasLogFunc env, HasCallStack)
+  :: (MonadIO m, HasLogFunc env, HasCallStack, HasVerboseFlag env)
   => env -> Sh.Sh a -> m a
 shelly' env = Sh.shelly -- . Sh.silently
   . Sh.log_stdout_with (runRIO env . logDebug . display)
   . Sh.log_stderr_with (runRIO env . logDebug . display)
+  . Sh.print_stdout (isVerbose env)
+  . Sh.print_stderr (isVerbose env)
