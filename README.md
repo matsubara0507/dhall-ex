@@ -6,11 +6,15 @@ dhall-ex is cli tool to support dhall.
 
 ```
 $ dhall-ex --help
-Usage: dhall-ex [-v|--verbose] [-c|--config PATH] COMMAND [--version]
+dhall-ex - cli tool to support dhall
+
+Usage: dhall-ex [-v|--verbose] [-c|--config PATH] [--only NAME] COMMAND
+                [--version]
 
 Available options:
   -v,--verbose             Enable verbose mode: verbosity level "debug"
   -c,--config PATH         Configuration file
+  --only NAME              Exec subcommand only NAME in config
   --version                Show version
   -h,--help                Show this help text
 
@@ -20,6 +24,8 @@ Available commands:
   init                     Init dhall-ex work directory
   build                    Build Dhall file to YAML or JSON
   deploy                   Deploy builded config file to remote repository
+  checkout                 Checkout repository in dhall workspace
+  pull                     Pull repository in dhall workspace
 ```
 
 ## Requirement
