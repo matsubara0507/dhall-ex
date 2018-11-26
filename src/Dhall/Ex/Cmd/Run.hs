@@ -21,10 +21,14 @@ class Run kv where
 
 runWithOnly ::
   (FilePath -> a -> Export -> RIO Env ()) -> FilePath -> a -> RIO Env ()
-runWithOnly act dir opts = do
+runWithOnly act dir opts = runWithOnly' (flip act opts) dir
+
+runWithOnly' ::
+  (FilePath -> Export -> RIO Env ()) -> FilePath -> RIO Env ()
+runWithOnly' act dir = do
   config <- asks (view #config)
   asks (view #only) >>= \case
-    Nothing   -> mapM_ (act dir opts) (config ^. #exports)
+    Nothing   -> mapM_ (act dir) (config ^. #exports)
     Just name -> case findExportByName (config ^. #exports) name of
-      Just export -> act dir opts export
+      Just export -> act dir export
       Nothing     -> logError $ display ("undefined name: " <> name)

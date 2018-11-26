@@ -18,11 +18,8 @@ import           Dhall.Ex.Config (Export)
 import           Dhall.Ex.Env
 import qualified Dhall.JSON      as Dhall
 
-build :: FilePath -> RIO Env ()
-build dir = mapM_ (buildExport dir) =<< asks (view #exports . view #config)
-
-buildExport :: FilePath -> Export -> RIO Env ()
-buildExport dir conf = do
+build :: FilePath -> Export -> RIO Env ()
+build dir conf = do
   logDebug $ display ("build export: " <> tshow conf)
   config <- asks (view #config)
   let localAct = buildExportToLocal $ config ^. #root

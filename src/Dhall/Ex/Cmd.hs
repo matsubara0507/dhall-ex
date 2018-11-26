@@ -20,9 +20,10 @@ run opts = do
   config  <- readConfig (opts ^. #config)
   logOpts <- logOptionsHandle stdout (opts ^. #verbose)
   withLogFunc logOpts $ \logger -> do
-    let env = #logger @= logger
-           <: #config @= config
-           <: #only   @= (opts ^. #only)
+    let env = #logger  @= logger
+           <: #config  @= config
+           <: #only    @= (opts ^. #only)
+           <: #verbose @= (opts ^. #verbose)
            <: nil
     runRIO env $ matchField
       (htabulateFor (Proxy @ Run) $ \m -> Field (Match $ run' m . runIdentity))

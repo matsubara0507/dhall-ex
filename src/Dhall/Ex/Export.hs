@@ -7,31 +7,22 @@
 module Dhall.Ex.Export
   ( module X
   , init
-  , initExport
   , cloneRepo
   , constructRepoUrl
   , workDir
   ) where
 
 import           RIO
-import           RIO.Directory
 
-import           Dhall.Ex.Config          (Export, ghToken)
+import           Dhall.Ex.Config        (Export, ghToken)
 import           Dhall.Ex.Env
-import           Dhall.Ex.Export.Build    as X (build)
-import           Dhall.Ex.Export.Checkout as X (Checkout, checkout)
-import           Dhall.Ex.Export.Deploy   as X (Deploy, deploy)
-import qualified Shelly                   as Sh
+import           Dhall.Ex.Export.Build  as X (build)
+import           Dhall.Ex.Export.Deploy as X (Deploy, deploy)
+import           Dhall.Ex.Export.Git    as X (Checkout, checkout, pull)
+import qualified Shelly                 as Sh
 
-init :: FilePath -> RIO Env ()
-init dir = do
-  logDebug $ fromString ("creat work directory if missing: " <> dir)
-  createDirectoryIfMissing True dir
-  config <- asks (view #config)
-  mapM_ (initExport dir) $ config ^. #exports
-
-initExport :: FilePath -> Export -> RIO Env ()
-initExport dir conf = do
+init :: FilePath -> Export -> RIO Env ()
+init dir conf = do
   logDebug $ display ("init export: " <> tshow conf)
   case conf ^. #repo of
     Just repo -> cloneRepo dir repo

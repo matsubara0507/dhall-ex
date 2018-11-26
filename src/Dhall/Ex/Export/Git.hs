@@ -4,7 +4,7 @@
 {-# LANGUAGE OverloadedLabels #-}
 {-# LANGUAGE TypeOperators    #-}
 
-module Dhall.Ex.Export.Checkout where
+module Dhall.Ex.Export.Git where
 
 import           RIO
 import           RIO.Directory
@@ -19,6 +19,7 @@ import           Dhall.Ex.Utils
 type Checkout = Record
   '[ "branch" >: Text
    , "new"    >: Bool
+   , "reset"  >: Bool
    ]
 
 checkout :: FilePath -> Checkout -> Export -> RIO Env ()
@@ -27,5 +28,14 @@ checkout dir opts conf = do
   env <- ask
   forM_ (conf ^. #repo) $ \repo -> do
     let path = dir </> Text.unpack repo
-    withCurrentDirectory path $
-      shelly' env $ gitCheckout (opts ^. #new) (opts ^. #branch)
+    withCurrentDirectory path $ shelly' env $ do
+      when (opts ^. #reset) $ gitReset True
+      gitCheckout (opts ^. #new) (opts ^. #branch)
+
+pull :: FilePath -> Export -> RIO Env ()
+pull dir conf = do
+  logDebug $ display ("pull export: " <> tshow conf)
+  env <- ask
+  forM_ (conf ^. #repo) $ \repo -> do
+    let path = dir </> Text.unpack repo
+    withCurrentDirectory path $ shelly' env gitPull
