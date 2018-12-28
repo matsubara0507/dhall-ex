@@ -8,14 +8,13 @@ module Dhall.Ex.Sort where
 
 import           RIO
 
-import           Data.HashMap.Strict.InsOrd            (InsOrdHashMap)
-import qualified Data.HashMap.Strict.InsOrd            as InsOrdHashMap
 import qualified Data.Text.Prettyprint.Doc             as Pretty
 import qualified Data.Text.Prettyprint.Doc.Render.Text as Pretty
 import           Dhall.Core                            (Expr (..))
 import qualified Dhall.Core                            as Dhall
 import           Dhall.Ex.Env                          (Env)
 import qualified Dhall.Import                          as Dhall
+import qualified Dhall.Map                             as Dhall
 import qualified Dhall.Parser                          as Dhall
 
 run :: FilePath -> RIO Env ()
@@ -47,11 +46,11 @@ sortFieldsBy e t = case (e, t) of
   _                            -> pure $ e
 
 sortKeyBy
-  :: InsOrdHashMap Text (Expr s a)
-  -> InsOrdHashMap Text (Expr s b)
-  -> Either Text (InsOrdHashMap Text (Expr s a))
-sortKeyBy r = InsOrdHashMap.traverseWithKey $ \k t ->
-  (maybe (Left k) pure $ InsOrdHashMap.lookup k r) >>= (`sortFieldsBy` t)
+  :: Dhall.Map Text (Expr s a)
+  -> Dhall.Map Text (Expr s b)
+  -> Either Text (Dhall.Map Text (Expr s a))
+sortKeyBy r = Dhall.traverseWithKey $ \k t ->
+  (maybe (Left k) pure $ Dhall.lookup k r) >>= (`sortFieldsBy` t)
 
 writeWithPretty :: (Show s, Show a, Pretty.Pretty a)
   => FilePath -> (Text, Expr s a) -> RIO Env ()

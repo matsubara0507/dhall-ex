@@ -13,7 +13,6 @@ import           Prelude
 
 import           Data.Extensible
 import           Data.Functor.Identity
-import           Data.Proxy
 import           Data.String           (fromString)
 import qualified Dhall                 as Dhall
 import           GHC.TypeLits

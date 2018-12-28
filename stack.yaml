@@ -1,6 +1,8 @@
-resolver: lts-12.18
+resolver: lts-13.0
 packages:
 - .
+extra-deps:
+- extensible-0.5
 
 docker:
   repo: fpco/stack-build
