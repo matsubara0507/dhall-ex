@@ -1,5 +1,10 @@
 # Changelog for dhall-ex
 
+## 0.3.0
+
+- LTS-13.0
+    - dhall-1.19
+
 ## 0.2.0
 
 - Feat: docker image
