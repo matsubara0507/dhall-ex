@@ -1,7 +1,5 @@
 name:                dhall-ex
 version:             0.3.0.0
-#synopsis:
-#description:
 homepage:            https://github.com/matsubara0507/dhall-ex#readme
 license:             MIT
 author:              MATSUBARA Nobutada
@@ -40,7 +38,7 @@ dependencies:
 - rio >= 0.1.1.0
 - extensible >= 0.4.9
 - aeson
-- dhall
+- dhall >= 1.19
 - dhall-json
 - insert-ordered-containers
 - prettyprinter
@@ -58,13 +56,3 @@ executables:
     - dhall-ex
     - gitrev
     - optparse-applicative
-
-tests:
-  dhall-ex-test:
-    main: Driver.hs
-    source-dirs: test
-    dependencies:
-    - dhall-ex
-    - tasty
-    - tasty-hspec
-    other-modules: []
