@@ -1,13 +1,10 @@
-resolver: lts-13.0
+resolver: lts-14.9
 packages:
 - .
 extra-deps:
-- extensible-0.5
+- extensible-0.6.1
+- membership-0
 
 docker:
-  repo: fpco/stack-build
+  repo: matsubara0507/stack-build
   enable: false
-image:
-  container:
-    name: matsubara0507/dhall-ex
-    base: fpco/ubuntu-with-libgmp
