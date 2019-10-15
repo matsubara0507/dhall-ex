@@ -54,5 +54,5 @@ executables:
     source-dirs: app
     dependencies:
     - dhall-ex
-    - gitrev
+    - githash
     - optparse-applicative

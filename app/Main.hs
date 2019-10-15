@@ -14,18 +14,16 @@ import qualified Paths_dhall_ex      as Meta
 import           RIO
 
 import           Data.Extensible
-import           Data.Version        (Version)
-import qualified Data.Version        as Version
-import           Development.GitRev
 import           Dhall.Ex.Cmd
 import qualified Dhall.Ex.Export     as Export
 import           GHC.TypeLits
 import           Options.Applicative
+import qualified Version
 
 main :: IO ()
 main = run =<< execParser opts
   where
-    opts = info (options <**> version Meta.version <**> helper)
+    opts = info (options <**> version <**> helper)
          $ fullDesc
         <> header "dhall-ex - cli tool to support dhall"
 
@@ -75,16 +73,7 @@ instance Wrapper ParserInfo where
 withInfo :: Parser a -> String -> ParserInfo a
 withInfo opts = info (helper <*> opts) . progDesc
 
-version :: Version -> Parser (a -> a)
-version v = infoOption (showVersion v)
+version :: Parser (a -> a)
+version = infoOption (Version.build Meta.version)
     $ long "version"
    <> help "Show version"
-
-showVersion :: Version -> String
-showVersion v = unwords
-  [ "Version"
-  , Version.showVersion v ++ ","
-  , "Git revision"
-  , $(gitHash)
-  , "(" ++ $(gitCommitCount) ++ " commits)"
-  ]
