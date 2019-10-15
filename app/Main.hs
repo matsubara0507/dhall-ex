@@ -16,7 +16,6 @@ import           RIO
 import           Data.Extensible
 import           Dhall.Ex.Cmd
 import qualified Dhall.Ex.Export     as Export
-import           GHC.TypeLits
 import           Options.Applicative
 import qualified Version
 
@@ -62,9 +61,9 @@ variantFrom ::
   Forall (KeyIs KnownSymbol) xs => RecordOf ParserInfo xs -> Parser (Variant xs)
 variantFrom = subparser . subcmdVariant
   where
-    subcmdVariant = hfoldMapWithIndexFor (Proxy @ (KeyIs KnownSymbol)) $ \m x ->
-      let k = symbolVal (proxyAssocKey m)
-      in command k ((EmbedAt m . Field . pure) <$> getField x)
+    subcmdVariant =
+      hfoldMapWithIndexFor (Proxy @ (KeyIs KnownSymbol)) $ \m x ->
+        command (stringKeyOf m) ((EmbedAt m . Field . pure) <$> getField x)
 
 instance Wrapper ParserInfo where
   type Repr ParserInfo a = ParserInfo a

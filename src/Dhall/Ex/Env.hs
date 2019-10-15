@@ -24,5 +24,5 @@ instance HasLogFunc Env where
 class HasVerboseFlag env where
   isVerbose :: env -> Bool
 
-instance Associate "verbose" Bool xs => HasVerboseFlag (Record xs) where
+instance Lookup xs "verbose" Bool => HasVerboseFlag (Record xs) where
   isVerbose = view #verbose

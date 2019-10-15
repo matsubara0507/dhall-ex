@@ -13,15 +13,12 @@ import           Prelude
 
 import           Data.Extensible
 import           Data.Functor.Identity
-import           Data.String           (fromString)
 import qualified Dhall                 as Dhall
-import           GHC.TypeLits
 
-instance Forall (KeyValue KnownSymbol (Instance1 Dhall.Interpret h)) xs => Dhall.Interpret (Field h :* xs) where
+instance Forall (KeyTargetAre KnownSymbol (Instance1 Dhall.Interpret h)) xs => Dhall.Interpret (xs :& Field h) where
   autoWith opts = Dhall.record $ hgenerateFor
-    (Proxy @ (KeyValue KnownSymbol (Instance1 Dhall.Interpret h))) $ \m ->
-      let k = (fromString . symbolVal . proxyAssocKey) m in
-      Dhall.field k (fmap Field (Dhall.autoWith opts))
+    (Proxy @ (KeyTargetAre KnownSymbol (Instance1 Dhall.Interpret h))) $ \m ->
+      Dhall.field (stringKeyOf m) (fmap Field (Dhall.autoWith opts))
 
-deriving instance Dhall.Interpret (h (AssocValue kv)) => Dhall.Interpret (Field h kv)
+deriving instance Dhall.Interpret (h (TargetOf kv)) => Dhall.Interpret (Field h kv)
 deriving instance Dhall.Interpret a => Dhall.Interpret (Identity a)

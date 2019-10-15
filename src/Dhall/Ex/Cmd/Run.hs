@@ -17,7 +17,7 @@ showNotImpl :: MonadIO m => m ()
 showNotImpl = hPutBuilder stdout "not yet implement command."
 
 class Run kv where
-  run' :: proxy kv -> AssocValue kv -> RIO Env ()
+  run' :: proxy kv -> TargetOf kv -> RIO Env ()
 
 runWithOnly ::
   (FilePath -> a -> Export -> RIO Env ()) -> FilePath -> a -> RIO Env ()
