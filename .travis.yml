@@ -12,23 +12,29 @@ install:
 - mkdir -p ~/.local/bin
 - export PATH=$HOME/.local/bin:$PATH
 - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
-- stack install tasty-discover
 jobs:
   include:
     - stage: build dependencies
-      script: stack --no-terminal --install-ghc test --bench --only-dependencies
+      script: stack --docker --no-terminal test --only-dependencies
     - stage: run test
-      script: stack --no-terminal test --bench --no-run-benchmarks --no-haddock-deps --pedantic
-    - stage: exec command
+      script: stack --docker --no-terminal test --no-haddock-deps --pedantic
+    - stage: exec example
       script:
         - cd example
-        - stack exec -- dhall-ex echo success
-        - stack exec -- dhall-ex build
+        - stack exec --docker -- dhall-ex echo success
+        - stack exec --docker -- dhall-ex build
         - git diff --name-only >&2
     - stage: push docker image
-      if: branch = master
+      if: branch = master AND type = push
       script:
-       - stack docker pull
-       - stack --docker image container
-       - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-       - docker push $TRAVIS_REPO_SLUG
+      - stack --docker --local-bin-path=./bin install
+      - docker build -t matsubara0507/dhall-ex . --build-arg local_bin_path=./bin
+      - echo "$DOCKER_PASSWORD" | docker login -u matsubara0507 --password-stdin
+      - docker push matsubara0507/dhall-ex
+    - stage: push docker image
+      if: tag IS present
+      script:
+      - stack --docker --local-bin-path=./bin install
+      - docker build -t matsubara0507/dhall-ex:$TRAVIS_TAG . --build-arg local_bin_path=./bin
+      - echo "$DOCKER_PASSWORD" | docker login -u matsubara0507 --password-stdin
+      - docker push matsubara0507/dhall-ex:$TRAVIS_TAG

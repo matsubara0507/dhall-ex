@@ -1,2 +1,3 @@
 .stack-work/
 dhall-ex.cabal
+bin
